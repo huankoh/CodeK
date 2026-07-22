@@ -1,0 +1,10 @@
+dataset_key	filename	source_version	retrieved_on	bytes	sha256	redistribution_status
+mimic	mimic.csv	LOCAL_ONLY	YYYY-MM-DD	LOCAL_ONLY	LOCAL_ONLY	credentialed-do-not-redistribute
+eicu	eicu_cohort_modify.csv	LOCAL_ONLY	YYYY-MM-DD	LOCAL_ONLY	LOCAL_ONLY	credentialed-do-not-redistribute
+framingham	framingham.csv	LOCAL_ONLY	YYYY-MM-DD	LOCAL_ONLY	LOCAL_ONLY	license-review-required
+breast	gene_breast_normalized.csv	LOCAL_ONLY	YYYY-MM-DD	LOCAL_ONLY	LOCAL_ONLY	follow-source-license
+heart	heart_normalized.csv	LOCAL_ONLY	YYYY-MM-DD	LOCAL_ONLY	LOCAL_ONLY	follow-source-license
+stroke	stroke_normalized.csv	LOCAL_ONLY	YYYY-MM-DD	LOCAL_ONLY	LOCAL_ONLY	permission-required-before-redistribution
+wgs_group1	wgs_dummy_dataset.csv	LOCAL_ONLY	YYYY-MM-DD	LOCAL_ONLY	LOCAL_ONLY	follow-pgp-terms
+wgs_group2	group2_dummy_dataset.csv	LOCAL_ONLY	YYYY-MM-DD	LOCAL_ONLY	LOCAL_ONLY	follow-pgp-terms
+wgs_group3	group3_dummy_dataset.csv	LOCAL_ONLY	YYYY-MM-DD	LOCAL_ONLY	LOCAL_ONLY	follow-pgp-terms

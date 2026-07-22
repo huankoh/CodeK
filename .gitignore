@@ -1,0 +1,23 @@
+.DS_Store
+Thumbs.db
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
+
+# Generated training and explanation outputs
+*.pt
+*.pth
+*.ckpt
+best_model*
+lime_explanation_*.html
+temporary.csv
+logs/
+runs/
+
+# Raw or analysis-ready data are managed separately; retain only documentation.
+data/*
+!data/README.md
+!data/MANIFEST.tsv

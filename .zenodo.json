@@ -1,0 +1,32 @@
+{
+  "title": "CodeK: Contrastive Optimization and Distillation for Exiguous Knowledge for Data-Limited Biomedical Applications",
+  "upload_type": "software",
+  "description": "Archival release of the CodeK source code, reproducibility documentation, and manuscript figure materials. Restricted clinical datasets are not redistributed; their controlled-access source records are documented in DATA_AVAILABILITY.md.",
+  "creators": [
+    {"name": "Li, Li"},
+    {"name": "Koh, Huan Yee"},
+    {"name": "Yang, Madeleine"},
+    {"name": "Zheng, Yizhen"},
+    {"name": "Arora, Rohit"},
+    {"name": "Wu, Chun-Ting"},
+    {"name": "Jin, Ming"},
+    {"name": "Pan, Shirui"},
+    {"name": "Church, George M."}
+  ],
+  "access_right": "open",
+  "license": "Apache-2.0",
+  "keywords": [
+    "biomedical machine learning",
+    "supervised contrastive learning",
+    "small data",
+    "class imbalance",
+    "interpretability"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/huankoh/CodeK",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}

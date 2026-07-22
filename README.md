@@ -1,97 +1,82 @@
-### CodeK: Contrastive Optimization and Distillation for Exiguous Knowledge
+# CodeK
 
-CodeK is an interpretable deep learning framework tailored for data-limited biomedical settings. It unites a Mixer-based encoder with a dual-branch training scheme that combines supervised contrastive learning and classification. CodeK also supports robust, model-agnostic feature attribution for clinician-facing interpretability.
+**Contrastive Optimization and Distillation for Exiguous Knowledge for Data-Limited Biomedical Applications**
 
-### Repository structure
+CodeK is an interpretable deep-learning framework for small and imbalanced biomedical datasets. It combines class-conditional data augmentation, a Mixer-based encoder, supervised contrastive learning, classification, and post hoc feature attribution.
 
-- **main.py**: Train/evaluate CodeK on supported datasets
-- **model.py**: MLPMixer encoder, supervised contrastive loss, downstream classifier
-- **trainer.py**: Training loop, ROC/AUC evaluation, model checkpointing
-- **data.py**: CSV loading, encoding, imputation, scaling, split, augmentation utilities
-- **baseline.py**: Logistic Regression, Random Forest, SVM baselines
-- **interpretation.py**: LIME-based feature attribution for saved/pretrained models
-- **scripts/**: Example commands for datasets (`mimic.sh`, `framingham.sh`, `eicu.sh`, `wgs_group2.sh`, `wgs_group3.sh`)
-- **data/**: Example CSVs used in the paper/experiments
+## Archival status
 
-### Requirements
+The permanent, citable version of the code and accompanying reproducibility materials is deposited in Zenodo: [https://doi.org/10.5281/zenodo.21487356](https://doi.org/10.5281/zenodo.21487356).
 
-- Python 3.8+
-- PyTorch (tested with recent 1.x/2.x)
-- scikit-learn, numpy, pandas, matplotlib, seaborn, tqdm, scipy, lime
+The GitHub repository at <https://github.com/huankoh/CodeK> is an additional development and distribution resource. GitHub is not the archival version of record.
 
-Install example:
+## Repository layout
+
+- `main.py`: train and evaluate CodeK on supported datasets.
+- `model.py`: Mixer encoder, supervised contrastive loss, and classifier.
+- `trainer.py`: training loop, ROC/AUC evaluation, and checkpointing.
+- `data.py`: loading, encoding, imputation, scaling, splitting, and augmentation.
+- `baseline.py`: logistic regression, random forest, and SVM baselines.
+- `interpretation*.py`: LIME-based attribution and feature-ranking utilities.
+- `scripts/`: example dataset-specific commands and the archive verifier.
+- `paper_figure_plots/`: notebooks and source tables used to create manuscript figures.
+- `data/`: data manifest and access instructions; restricted clinical data are not included.
+- `DATA_AVAILABILITY.md`: provenance, access conditions, and redistribution status for each dataset.
+
+## Installation
+
+Python 3.8 or newer is recommended. Create an isolated environment and install the declared dependencies:
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
-pip install --upgrade pip
-pip install torch torchvision torchaudio \
-    numpy pandas scikit-learn matplotlib seaborn tqdm scipy lime
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-### Datasets
+The original experiments used PyTorch 1.12. Later PyTorch 1.x and 2.x versions may also work, but should be recorded in any rerun report.
 
-CSV datasets are expected under `data/`. Please download all the CSVs in the [Google Drive](https://drive.google.com/drive/folders/1KkgMHpsJLUp3bFpaZm29FOuhUoCmqoFo?usp=sharing) and put it into the `data/` folder for quick runs:
+## Data setup
 
-- **eicu**: `data/eicu_cohort_modify.csv` (label: `aki_stage`)
-- **mimic**: `data/mimic.csv` (label: `aki_stage`)
-- **framingham**: `data/framingham.csv` (label: `TenYearCHD`)
-- **wgs_group1**: `data/wgs_dummy_dataset.csv` (label: `Y`)
-- **wgs_group2**: `data/group2_dummy_dataset.csv` (label: `Y`)
-- **wgs_group3**: `data/group3_dummy_dataset.csv` (label: `Y`)
+The data files are not bundled indiscriminately with the source code. MIMIC and eICU records are credentialed datasets and must never be redistributed through GitHub or a public general-purpose archive. Other third-party datasets retain their source licenses and access conditions.
 
-Data preprocessing (encoding, drop, scale, imputation) is configured inside `main.py` / `data.py` per dataset. To add new datasets, mirror this pattern: specify `label_feature`, which columns to encode/drop/scale, and any dataset-specific normalization/binning.
+Follow [`DATA_AVAILABILITY.md`](DATA_AVAILABILITY.md) and [`data/README.md`](data/README.md) to obtain the inputs and place them under `data/` using the expected filenames.
 
-### Quickstart
+## Quick start
 
-From the project root:
+From the repository root:
 
 ```bash
 python main.py --data framingham --device cpu \
   --train_prop 0.7 --test_prop 0.3 \
   --batch_size 512 --epoch 200 --lr 5e-4 \
-  --base_tau 0.8 --tau 0.1 --hid_dim 150 --feat_hid_dim 300 --down_hid_dim 16 \
-  --dropout 0.3 --patch 1 --num_block 1 --seed 2
+  --base_tau 0.8 --tau 0.1 --hid_dim 150 --feat_hid_dim 300 \
+  --down_hid_dim 16 --dropout 0.3 --patch 1 --num_block 1 --seed 2
 ```
 
-Example runs (see `scripts/`)
+Supported command-line dataset keys are `eicu`, `mimic`, `framingham`, `wgs_group1`, `wgs_group2`, and `wgs_group3`. The manuscript figure notebooks document additional notebook-based analyses.
 
-Notes:
+The CLI exposes `--aug`, `--aug_size`, and `--n_component`. In this snapshot, the augmentation call in `main.py` is commented out; enable that block before requesting an augmented training run and record the change in the run metadata.
 
-- Use `--device cuda` to utilize a GPU if available.
-- The script prints training loss and validation AUC; the best model is saved as `best_model.pt` in the project root.
+## Interpretability
 
-### Command-line arguments (main)
-
-- **--data**: one of `eicu | mimic | framingham | wgs_group1 | wgs_group2 | wgs_group3` (required)
-- **--train_prop / --test_prop**: train/test split fractions
-- **--epoch, --batch_size, --lr, --weight_decay**: training hyperparameters
-- **--hid_dim, --feat_hid_dim, --down_hid_dim**: embedding, contrastive, and downstream dims
-- **--base_tau, --tau**: temperatures for supervised contrastive loss
-- **--dropout**: dropout in encoders
-- **--patch, --num_block**: Mixer encoder patching and block count
-- **--seed**: random seed; see `utils.set_random_seed`
-
-
-### Data augmentation
-
-CodeK includes a class-wise GMM augmentation utility in `data.augmentation`. The CLI exposes `--aug`, `--aug_size`, and `--n_component` flags; the augmentation call in `main.py` is currently commented out. To use augmentation, enable the augmentation block in `main.py` and pass the flags shown in the example scripts.
-
-### Interpretability (LIME)
-
-You can generate instance-level feature attributions using `interpretation.py` with a saved or pretrained model:
+Generate instance-level feature attributions with a compatible saved model:
 
 ```bash
-python interpretation.py --data mimic --train_prop 0.7 --test_prop 0.3 --num_samples 10 --random_seed 0
+python interpretation.py --data mimic --train_prop 0.7 --test_prop 0.3 \
+  --num_samples 10 --random_seed 0
 ```
 
-By default, `interpretation.py` loads `./pretrained/mimic_best_model_seed3.pt`. To use your own trained model, change `load_model()` to point to your checkpoint (e.g., `best_model.pt`). The script creates `lime_explanation_sample_*.html` files with per-instance explanations.
+`interpretation.py` contains the default checkpoint path. Change it to the checkpoint created by your run when needed.
 
+## Verify an archival copy
 
-### Using your own data
+Run the repository checks before creating a release or uploading a snapshot:
 
-To adapt CodeK to a new CSV dataset:
+```bash
+python scripts/verify_archive.py
+```
 
-1) Add your CSV to `data/`.
-2) Define dataset-specific preprocessing in `main.py` (encoding/drop/scale lists and `label_feature`).
-3) Update CLI choices if you add a new dataset key.
-4) Verify feature dimensions match the network input size.
+## Citation and license
+
+Use the citation metadata in [`CITATION.cff`](CITATION.cff) and cite the permanent DOI once published. The software is licensed under the [Apache License 2.0](LICENSE). Dataset licenses and data-use agreements are separate from the software license.

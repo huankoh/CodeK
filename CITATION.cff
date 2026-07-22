@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "Please cite the archived CodeK release and the associated article."
+title: "CodeK: Contrastive Optimization and Distillation for Exiguous Knowledge for Data-Limited Biomedical Applications"
+type: software
+version: 1.0.0
+doi: 10.5281/zenodo.21487356
+date-released: 2026-07-22
+authors:
+  - family-names: Li
+    given-names: Li
+  - family-names: Koh
+    given-names: Huan Yee
+    orcid: "https://orcid.org/0000-0002-0488-2616"
+  - family-names: Yang
+    given-names: Madeleine
+  - family-names: Zheng
+    given-names: Yizhen
+  - family-names: Arora
+    given-names: Rohit
+  - family-names: Wu
+    given-names: Chun-Ting
+  - family-names: Jin
+    given-names: Ming
+  - family-names: Pan
+    given-names: Shirui
+  - family-names: Church
+    given-names: George M.
+repository-code: "https://github.com/huankoh/CodeK"
+license: Apache-2.0
+keywords:
+  - biomedical machine learning
+  - supervised contrastive learning
+  - small data
+  - class imbalance
+  - interpretability
